@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -34,12 +34,22 @@ async function run() {
     const database = client.db("toyFactoryDB");
     const toysCollections = database.collection("toys");
 
+    // get all toys
     app.get("/toys", async (req, res) => {
 
-      const cursor = await toysCollections.find().toArray();
+      const allToys = await toysCollections.find().toArray();
       
-      res.send(cursor);
+      res.send(allToys);
 
+    })
+
+    // get a single toy
+    app.get("/toys/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const toy = await toysCollections.findOne(query);
+
+      res.send(toy);
     })
 
     // Send a ping to confirm a successful connection
