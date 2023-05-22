@@ -72,6 +72,48 @@ async function run() {
       const result = await toysCollections.find(query, options).toArray();
       res.send(result);
     });
+    // get sorted ascending order price
+    app.get("/toys/sort/asc", async(req, res) => {
+      const email = req.query.email
+      const query = { sellerEmail: email };
+      const options = {
+        sort: {
+          price: -1
+        },
+        projection: {
+          _id: 1,
+          toyName: 1,
+          picture: 1,
+          sellerName: 1,
+          price: 1,
+          rating: 1,
+          category: 1,
+        },
+      }
+      const result = await toysCollections.find(query,options).toArray();
+      res.send(result);
+    });
+    // get sorted descending order
+    app.get("/toys/sort/desc", async(req, res) => {
+      const email = req.query.email
+      const query = { sellerEmail: email };
+      const options = {
+        sort: {
+          price: 1
+        },
+        projection: {
+          _id: 1,
+          toyName: 1,
+          picture: 1,
+          sellerName: 1,
+          price: 1,
+          rating: 1,
+          category: 1,
+        },
+      }
+      const result = await toysCollections.find(query,options).toArray();
+      res.send(result);
+    });
 
     // add a toy
     app.post("/addToy", async (req, res) => {
@@ -88,6 +130,14 @@ async function run() {
         category: toyData.category,
       };
       const result = await toysCollections.insertOne(newToy);
+      res.send(result);
+    });
+
+    // delete a toy
+    app.delete("/toy/delete/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await toysCollections.deleteOne(query);
       res.send(result);
     });
 
