@@ -51,23 +51,6 @@ async function run() {
       res.send(toy);
     });
 
-    // find by email
-    // app.get(`/user`), async (req, res) => {
-    //   const {email} = await req.query;
-    //   console.log(email);
-    //   res.send(email);
-
-    //   // const query = { sellerEmail: email };
-
-    //   // const options = {
-    //   //   // sort returned documents in ascending order by title (A->Z)
-    //   //   // sort: { title: 1 },
-    //   //   // Include only the `title` and `imdb` fields in each returned document
-    //   //   projection: { _id: 1, toyName: 1, picture: 1, sellerName: 1, price:1, rating: 1, category: 1},
-    //   // };
-    //   // const result = toysCollections.find(query, options);
-    //   // res.send(result);
-    // }
     app.get("/userToys", async (req, res) => {
       const email = req.query.email;
       const query = { sellerEmail: email };
