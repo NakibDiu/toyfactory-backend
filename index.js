@@ -115,6 +115,15 @@ async function run() {
       res.send(result);
     });
 
+    // get toys according to category
+    app.get("/toys/category/:category", async (req, res) => {
+      const category = req.params.category;
+      const query = { category: category };
+      const toys = await toysCollections.find(query).toArray();
+
+      res.send(toys);
+    });
+
     // add a toy
     app.post("/addToy", async (req, res) => {
       const toyData = req.body;
