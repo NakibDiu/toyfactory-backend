@@ -73,12 +73,12 @@ async function run() {
       res.send(result);
     });
     // get sorted ascending order price
-    app.get("/toys/sort/asc", async(req, res) => {
-      const email = req.query.email
+    app.get("/toys/sort/asc", async (req, res) => {
+      const email = req.query.email;
       const query = { sellerEmail: email };
       const options = {
         sort: {
-          price: -1
+          price: -1,
         },
         projection: {
           _id: 1,
@@ -89,17 +89,17 @@ async function run() {
           rating: 1,
           category: 1,
         },
-      }
-      const result = await toysCollections.find(query,options).toArray();
+      };
+      const result = await toysCollections.find(query, options).toArray();
       res.send(result);
     });
     // get sorted descending order
-    app.get("/toys/sort/desc", async(req, res) => {
-      const email = req.query.email
+    app.get("/toys/sort/desc", async (req, res) => {
+      const email = req.query.email;
       const query = { sellerEmail: email };
       const options = {
         sort: {
-          price: 1
+          price: 1,
         },
         projection: {
           _id: 1,
@@ -110,8 +110,8 @@ async function run() {
           rating: 1,
           category: 1,
         },
-      }
-      const result = await toysCollections.find(query,options).toArray();
+      };
+      const result = await toysCollections.find(query, options).toArray();
       res.send(result);
     });
 
@@ -139,6 +139,28 @@ async function run() {
         category: toyData.category,
       };
       const result = await toysCollections.insertOne(newToy);
+      res.send(result);
+    });
+
+    // update a toy
+    app.put("/toys/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const newToy = req.body;
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedToy = {
+        $set: {
+          toyName: newToy.toyName,
+          picture: newToy.picture,
+          description: newToy.description,
+          category: newToy.category,
+          price: newToy.price,
+          availableQuantity: newToy.availableQuantity,
+          rating: newToy.rating,
+        },
+      };
+      const result = await toysCollections.updateOne(filter, updatedToy, options);
       res.send(result);
     });
 
